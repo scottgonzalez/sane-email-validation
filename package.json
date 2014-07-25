@@ -1,0 +1,30 @@
+{
+  "name": "sane-email-validation",
+  "version": "0.0.0",
+  "author": "Scott González <scott.gonzalez@gmail.com> (http://scottgonzalez.com)",
+  "description": "Sanely validate email addresses, based on HTML5's definition of email addresses",
+  "keywords": [
+    "email",
+    "validation",
+    "validate"
+  ],
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/scottgonzalez/sane-email-validation/raw/master/LICENSE.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/scottgonzalez/sane-email-validation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scottgonzalez/sane-email-validation/issues"
+  },
+  "homepage": "https://github.com/scottgonzalez/sane-email-validation",
+  "scripts": {
+    "test": "node tests/all.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "nodeunit": "0.9.0"
+  }
+}
