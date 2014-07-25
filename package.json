@@ -25,6 +25,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "dco": "0.0.1",
     "nodeunit": "0.9.0"
   }
 }
