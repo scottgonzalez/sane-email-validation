@@ -23,9 +23,24 @@ if ( isEmail( email ) ) {
 }
 ```
 
+### `isNotEmail()`
+
+An inverted check is also exposed.
+
+```js
+var isNotEmail = require( "sane-email-validation" ).isNotEmail;
+var email = "...";
+
+if ( isNotEmail( email ) ) {
+  console.log( email + " is not valid." );
+} else {
+  console.log( email + " is valid." );
+}
+```
+
 ## License
 
-Copyright 2014 Scott González. Released under the terms of the MIT license.
+Copyright Scott González. Released under the terms of the MIT license.
 
 ---
 

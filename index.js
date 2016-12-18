@@ -1,4 +1,5 @@
 exports = module.exports = isEmail;
+exports.isNotEmail = isNotEmail;
 
 var localAddr = /^[a-z0-9.!#$%&'*+\/=?^_`{|}~-]+$/i;
 var domain = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i;
@@ -18,4 +19,8 @@ function isEmail( str ) {
 	}
 
 	return true;
+}
+
+function isNotEmail( str ) {
+	return !isEmail( str )
 }
