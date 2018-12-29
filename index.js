@@ -18,6 +18,10 @@ function isEmail( str ) {
 		return false;
 	}
 
+	if ( parts[ 0 ].substr( -1 ) === "." ) {
+		return false;
+	}
+
 	return true;
 }
 
