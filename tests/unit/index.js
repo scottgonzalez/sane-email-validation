@@ -9,7 +9,7 @@ exports.isEmail = {
 	},
 
 	"invalid": function( test ) {
-		test.expect( 7 );
+		test.expect( 8 );
 
 		var longLabel = new Array( 65 ).join( "a" );
 
@@ -27,6 +27,8 @@ exports.isEmail = {
 			"Cannot contain special characters in domain." );
 		test.strictEqual( isEmail( "debt@" + longLabel + ".com" ), false,
 			"Cannot contain domain label >63 characters." );
+		test.strictEqual( isEmail( "debt.@example.com" ), false,
+			"Cannot end name with dot." );
 		test.done();
 	},
 
@@ -53,7 +55,7 @@ exports.isNotEmail = {
 	},
 
 	"invalid": function( test ) {
-		test.expect( 7 );
+		test.expect( 8 );
 
 		var longLabel = new Array( 65 ).join( "a" );
 
@@ -71,6 +73,8 @@ exports.isNotEmail = {
 			"Cannot contain special characters in domain." );
 		test.strictEqual( isNotEmail( "debt@" + longLabel + ".com" ), true,
 			"Cannot contain domain label >63 characters." );
+		test.strictEqual( isNotEmail( "debt.@example.com" ), true,
+			"Cannot end name with dot." );
 		test.done();
 	},
 
