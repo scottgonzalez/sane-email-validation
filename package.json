@@ -21,11 +21,13 @@
   },
   "homepage": "https://github.com/scottgonzalez/sane-email-validation",
   "scripts": {
-    "test": "node tests/all.js"
+    "lint": "standard",
+    "nodeunit": "nodeunit tests/unit",
+    "test": "npm run lint && npm run nodeunit"
   },
   "dependencies": {},
   "devDependencies": {
-    "dco": "1.0.0",
-    "nodeunit": "0.9.0"
+    "nodeunit": "0.11.3",
+    "standard": "^12.0.1"
   }
 }
