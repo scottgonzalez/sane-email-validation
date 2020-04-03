@@ -33,7 +33,7 @@ exports.isEmail = {
   },
 
   'valid': function (test) {
-    test.expect(3)
+    test.expect(7)
 
     const longLabel = new Array(64).join('a')
 
@@ -43,6 +43,14 @@ exports.isEmail = {
       'Should accept 63 character domain labels.')
     test.strictEqual(isEmail(".!#$%&'*+/=?^_`{|}~-a9@example.com"), true,
       'Should accept certain special characters in local address.')
+    test.strictEqual(isEmail('👋@example.com'), true,
+      'Should accept unicode in local address')
+    test.strictEqual(isEmail('debt@👋.com'), true,
+      'Should accept unicode in domain')
+    test.strictEqual(isEmail('debt@xn--wp8h.com'), true,
+      'Should accept punycoded domains')
+    test.strictEqual(isEmail('debt@billing.👋.com'), true,
+      'Should accept unicode in every domain label')
     test.done()
   }
 }
@@ -79,7 +87,7 @@ exports.isNotEmail = {
   },
 
   'valid': function (test) {
-    test.expect(3)
+    test.expect(7)
 
     const longLabel = new Array(64).join('a')
 
@@ -89,6 +97,14 @@ exports.isNotEmail = {
       'Should accept 63 character domain labels.')
     test.strictEqual(isNotEmail(".!#$%&'*+/=?^_`{|}~-a9@example.com"), false,
       'Should accept certain special characters in local address.')
+    test.strictEqual(isNotEmail('👋@example.com'), false,
+      'Should accept unicode in local address')
+    test.strictEqual(isNotEmail('debt@👋.com'), false,
+      'Should accept unicode in domain')
+    test.strictEqual(isNotEmail('debt@xn--wp8h.com'), false,
+      'Should accept punycoded domains')
+    test.strictEqual(isNotEmail('debt@billing.👋.com'), false,
+      'Should accept unicode in every domain label')
     test.done()
   }
 }
