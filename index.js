@@ -1,5 +1,7 @@
 exports = module.exports = isEmail
 exports.isNotEmail = isNotEmail
+exports.isAsciiEmail = isAsciiEmail
+exports.isNotAsciiEmail = isNotAsciiEmail
 
 // Unicode ranges from RFC 3987
 //    ucschar        = %xA0-D7FF / %xF900-FDCF / %xFDF0-FFEF
@@ -28,8 +30,11 @@ const unicodeRanges = [
   '\uE1000-\uEFFFD'
 ].join('')
 const localAddr = new RegExp(`^[a-z0-9.!#$%&'*+/=?^_\`{|}~${unicodeRanges}-]+$`, 'i')
+const asciiLocalAddr = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+$/i
 const label = `[a-z0-9${unicodeRanges}](?:[a-z0-9${unicodeRanges}-]{0,61}[a-z0-9${unicodeRanges}])?`
+const asciiLabel = '[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?'
 const domain = new RegExp(`^${label}(?:\\.${label})+$`, 'i')
+const asciiDomain = new RegExp(`^${asciiLabel}(?:\\.${asciiLabel})+$`, 'i')
 
 function isEmail (string) {
   const parts = string.split('@')
@@ -55,4 +60,37 @@ function isEmail (string) {
 
 function isNotEmail (string) {
   return !isEmail(string)
+}
+
+function isAsciiEmail (string) {
+  const parts = string.split('@')
+
+  if (parts.length !== 2) {
+    return false
+  }
+
+  if (!asciiLocalAddr.test(parts[0])) {
+    return false
+  }
+
+  if (!asciiDomain.test(parts[1])) {
+    return false
+  }
+
+  if (parts[ 0 ].substr(-1) === '.') {
+    return false
+  }
+
+  const labels = parts[1].split('.')
+  for (const label of labels) {
+    if (label.indexOf('xn--') === 0) {
+      return false
+    }
+  }
+
+  return true
+}
+
+function isNotAsciiEmail (string) {
+  return !isAsciiEmail(string)
 }
