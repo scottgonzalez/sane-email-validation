@@ -70,4 +70,4 @@ if (isNotAsciiEmail(email)) {
 
 ## License
 
-Copyright Scott González. Released under the terms of the MIT license.
+Copyright Sane Email Validation contributors. Released under the terms of the MIT license.
