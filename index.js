@@ -1,8 +1,3 @@
-exports = module.exports = isEmail
-exports.isNotEmail = isNotEmail
-exports.isAsciiEmail = isAsciiEmail
-exports.isNotAsciiEmail = isNotAsciiEmail
-
 // Unicode ranges from RFC 3987, section 2.2
 const unicodeRanges = [
   '\u00A0-\uD7FF',
@@ -23,68 +18,64 @@ const unicodeRanges = [
   '\uD0000-\uDFFFD',
   '\uE1000-\uEFFFD'
 ].join('')
-const localAddr = new RegExp(`^[a-z0-9.!#$%&'*+/=?^_\`{|}~${unicodeRanges}-]+$`, 'i')
-const asciiLocalAddr = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+$/i
-const label = `[a-z0-9${unicodeRanges}](?:[a-z0-9${unicodeRanges}-]{0,61}[a-z0-9${unicodeRanges}])?`
-const asciiLabel = '[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?'
-const domain = new RegExp(`^${label}(?:\\.${label})+$`, 'i')
-const asciiDomain = new RegExp(`^${asciiLabel}(?:\\.${asciiLabel})+$`, 'i')
 
-function isEmail (string) {
-  const parts = string.split('@')
+const methods = [
+  {
+    name: 'isEmail',
+    characters: unicodeRanges,
+    test: () => true
+  },
+  {
+    name: 'isAsciiEmail',
+    characters: '',
+    test: (parts) => {
+      const labels = parts[1].split('.')
+      for (const label of labels) {
+        if (label.indexOf('xn--') === 0) {
+          return false
+        }
+      }
 
-  if (parts.length !== 2) {
-    return false
-  }
-
-  if (!localAddr.test(parts[0])) {
-    return false
-  }
-
-  if (!domain.test(parts[1])) {
-    return false
-  }
-
-  if (parts[ 0 ].substr(-1) === '.') {
-    return false
-  }
-
-  return true
-}
-
-function isNotEmail (string) {
-  return !isEmail(string)
-}
-
-function isAsciiEmail (string) {
-  const parts = string.split('@')
-
-  if (parts.length !== 2) {
-    return false
-  }
-
-  if (!asciiLocalAddr.test(parts[0])) {
-    return false
-  }
-
-  if (!asciiDomain.test(parts[1])) {
-    return false
-  }
-
-  if (parts[ 0 ].substr(-1) === '.') {
-    return false
-  }
-
-  const labels = parts[1].split('.')
-  for (const label of labels) {
-    if (label.indexOf('xn--') === 0) {
-      return false
+      return true
     }
   }
+].reduce((methods, { characters, name, test }) => {
+  const localAddr = new RegExp(`^[a-z0-9.!#$%&'*+/=?^_\`{|}~${characters}-]+$`, 'i')
+  const label = `[a-z0-9${characters}](?:[a-z0-9${characters}-]{0,61}[a-z0-9${characters}])?`
+  const domain = new RegExp(`^${label}(?:\\.${label})+$`, 'i')
 
-  return true
+  methods[name] = (string) => {
+    const parts = string.split('@')
+
+    if (parts.length !== 2) {
+      return false
+    }
+
+    if (!localAddr.test(parts[0])) {
+      return false
+    }
+
+    if (!domain.test(parts[1])) {
+      return false
+    }
+
+    if (parts[ 0 ].substr(-1) === '.') {
+      return false
+    }
+
+    return test(parts)
+  }
+
+  return methods
+}, {})
+
+exports = module.exports = methods.isEmail
+exports.isAsciiEmail = methods.isAsciiEmail
+
+exports.isNotEmail = (string) => {
+  return !methods.isEmail(string)
 }
 
-function isNotAsciiEmail (string) {
-  return !isAsciiEmail(string)
+exports.isNotAsciiEmail = (string) => {
+  return !methods.isAsciiEmail(string)
 }
