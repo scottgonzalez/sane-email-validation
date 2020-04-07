@@ -36,6 +36,38 @@ if (isNotEmail(email)) {
 }
 ```
 
+### `isAsciiEmail()`
+
+An ASCII only version of the validator.
+
+Since internationalized email addresses are not fully supported by all infrastructure, some systems may want to limit what they consider valid. See [International email](https://en.wikipedia.org/wiki/International_email) and the [Email Address Internationalization](https://en.wikipedia.org/wiki/Email_address#Internationalization) on Wikipedia for more information.
+
+```js
+const isAsciiEmail = require('sane-email-validation').isAsciiEmail
+const email = '...'
+
+if (isAsciiEmail(email)) {
+  console.log(`${email} is valid.`)
+} else {
+  console.log(`${email} is not valid.`)
+}
+```
+
+### `isNotEmail()`
+
+An inverted check is also exposed for the ASCII only version.
+
+```js
+const isNotAsciiEmail = require('sane-email-validation').isNotAsciiEmail
+const email = '...'
+
+if (isNotAsciiEmail(email)) {
+  console.log(`${email} is not valid.`)
+} else {
+  console.log(`${email} is valid.`)
+}
+```
+
 ## License
 
 Copyright Scott González. Released under the terms of the MIT license.
