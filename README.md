@@ -53,7 +53,7 @@ if (isAsciiEmail(email)) {
 }
 ```
 
-### `isNotEmail()`
+### `isNotAsciiEmail()`
 
 An inverted check is also exposed for the ASCII only version.
 
