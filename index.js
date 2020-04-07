@@ -28,8 +28,8 @@ const methods = [
   {
     name: 'isAsciiEmail',
     characters: '',
-    test: (parts) => {
-      const labels = parts[1].split('.')
+    test: (localAddr, domain) => {
+      const labels = domain.split('.')
       for (const label of labels) {
         if (label.indexOf('xn--') === 0) {
           return false
@@ -40,9 +40,9 @@ const methods = [
     }
   }
 ].reduce((methods, { characters, name, test }) => {
-  const localAddr = new RegExp(`^[a-z0-9.!#$%&'*+/=?^_\`{|}~${characters}-]+$`, 'i')
+  const localAddrRegex = new RegExp(`^[a-z0-9.!#$%&'*+/=?^_\`{|}~${characters}-]+$`, 'i')
   const label = `[a-z0-9${characters}](?:[a-z0-9${characters}-]{0,61}[a-z0-9${characters}])?`
-  const domain = new RegExp(`^${label}(?:\\.${label})+$`, 'i')
+  const domainRegex = new RegExp(`^${label}(?:\\.${label})+$`, 'i')
 
   methods[name] = (string) => {
     const parts = string.split('@')
@@ -51,19 +51,21 @@ const methods = [
       return false
     }
 
-    if (!localAddr.test(parts[0])) {
+    const [localAddr, domain] = parts
+
+    if (!localAddrRegex.test(localAddr)) {
       return false
     }
 
-    if (!domain.test(parts[1])) {
+    if (!domainRegex.test(domain)) {
       return false
     }
 
-    if (parts[ 0 ].substr(-1) === '.') {
+    if (localAddr.substr(-1) === '.') {
       return false
     }
 
-    return test(parts)
+    return test(localAddr, domain)
   }
 
   return methods
